@@ -173,7 +173,7 @@ export function signup(userDTO){
 
 //oauth2 로그인 
 export function socialLogin(provider){
-    let frontedUrl="http://localhost:3000";
+    let frontedUrl;
     const hostname =window && window.location && window.location.hostname;
     if(hostname==="localhost"){
         frontedUrl="http://localhost:3000";

@@ -63,36 +63,53 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
          */
 
         //authProvider :GitHub
+        Member member=null;
 
-        if(StringUtils.hasText(email)){
-            //1.기존에 동일한 이메일 있을 경우 authProvider, 와 authProviderId 값만 업데이트
-            Member memberEntity = memberRepository.findByEmail(email);
-            memberEntity.setAuthProvider(authProvider);
-            memberEntity.setAuthProviderId(OAUTH2_ID);
+        //1.기존에 등록된 OAUTH2 가 있을 경우
+        if(memberRepository.existsByAuthProviderId(OAUTH2_ID)){
+            member = memberRepository.findMemberByAuthProviderId(OAUTH2_ID);
+        }else{
+        //2.기존에 등록된 OAUTH2 가 없을  경우
 
-        }else if(!memberRepository.existsByAuthProviderId(OAUTH2_ID)){
-            //2.유저가 존재하지 않으면 새로 생성한다.
-            MemberDto memberDto = MemberDto.builder()
-                    .username(authProvider+"_"+username)
-                    .email(email)
-                    .authProvider(authProvider)
-                    .authProviderId(OAUTH2_ID)
-                    .role(Role.USER)
-                    .build();
-
-            Member member = MemberDto.oauth2CreateMember(memberDto);
-            memberRepository.save(member);
+            if(StringUtils.hasText(email)){
+                //3. OAUTH2 가져온 email  이 존재하고 널이 아닐경우, DB 에서 해당 이메일로 회원정보를 가져온다.
+                Member memberEntity = memberRepository.findByEmail(email);
+                if(memberEntity!=null){
+                    //1)널이 아니면 DB 데이터에 업데이트 처리
+                    memberEntity.setAuthProvider(authProvider);
+                    memberEntity.setAuthProviderId(OAUTH2_ID);
+                    member=memberEntity;
+                }else{
+                    //2)기존에 등록된 OAUTH2  정보없고, email 은 존재하지만  DB에 등록된 정보가 없기에 신규로 등록 처리
+                    member=createOauth2Member( authProvider , username,  OAUTH2_ID,   email);
+                }
+            }else {
+                //4.기존에 등록된 OAUTH2  정보없고, OAUTH2 에서 가져온 email 이 널이라서 당연히 신규로 등록 처리
+                member=createOauth2Member( authProvider , username,  OAUTH2_ID,   email);
+            }
         }
-
-        //3.authProvider 통해 회원 정보를 불러온다.
-        Member member=memberRepository.findMemberByAuthProviderId(OAUTH2_ID);
 
 
         PrincipalDetails principalDetails = new PrincipalDetails(member, oAuth2User.getAttributes());
         log.info("========================2 Oauth2User  토큰 반환시 정보값 ================ {}", principalDetails.getMember().getId());
         return principalDetails;
-
     }
 
 
+    //oauth2 DB 등록
+    private Member createOauth2Member(String authProvider ,String username, String OAUTH2_ID, String  email){
+        MemberDto memberDto = MemberDto.builder()
+                .username(authProvider+"_"+username)
+                .email(email)
+                .authProvider(authProvider)
+                .authProviderId(OAUTH2_ID)
+                .role(Role.USER)
+                .build();
+        Member member = MemberDto.oauth2CreateMember(memberDto);
+        return memberRepository.save(member);
+    }
+
+
+
+    
 }

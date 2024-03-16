@@ -33,9 +33,6 @@ public class SecurityConfig  {
     //OAuth2 로그인 성공시 토큰 생성
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    //OAuth2 redirectUrlCookieFilter
-   // private final RedirectUrlCookieFilter redirectUrlCookieFilter;
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -123,8 +120,6 @@ public class SecurityConfig  {
         //인증 실패시 Oauth2 흐름으로 넘어가는 것을 막고 응답코드 403을 반환처리
         .exceptionHandling(exceptionConfig->exceptionConfig.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
-        //Oauth2 리다이렉트
-       // http.addFilterAfter(redirectUrlCookieFilter, OAuth2AuthorizationRequestRedirectFilter.class);
        return http.build();
     }
 

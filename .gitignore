@@ -1,0 +1,171 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+
+
+
+### back-end  =>Spring boot ###
+
+./back-end/HELP.md
+./back-end.gradle
+./back-end/build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/back-end/src/main/**/build/
+!**/back-end/src/test/**/build/
+
+### STS ###
+./back-end/.apt_generated
+./back-end/.classpath
+./back-end/.factorypath
+./back-end/.project
+./back-end/.settings
+./back-end/.springBeans
+./back-end/.sts4-cache
+./back-end/bin/
+!**/back-end/src/main/**/bin/
+!**/back-end/src/test/**/bin/
+
+### IntelliJ IDEA ###
+./back-end/.idea
+./back-end/*.iws
+./back-end/*.iml
+./back-end/*.ipr
+./back-end/out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+./back-end/nbproject/private/
+./back-end/nbbuild/
+./back-end/dist/
+./back-end/nbdist/
+./back-end/.nb-gradle/
+
+
+
+
+
+
+### VS Code ###
+.vscode/
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+
+/front-end/node_modules
+/front-end/.pnp
+/front-end.pnp.js
+
+# testing
+/front-end/coverage
+
+# production
+/front-end/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+.elasticbeanstalk/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+
+
+
+
+### front-end  => REACT ###
+./front-end/vscode/
+# dependencies
+./front-end/node_modules
+./front-end/.pnp
+./front-end/pnp.js
+
+# testing
+./front-end/coverage
+
+# production
+./front-end/build
+
+
+/front-end/node_modules
+/front-end/.pnp
+/front-end.pnp.js
+
+# testing
+/front-end/coverage
+
+# production
+/front-end/build
+
+# misc
+./front-end/.DS_Store
+./front-end/.env.local
+./front-end/.env.development.local
+./front-end/.env.test.local
+./front-end/.env.production.local
+
+./front-end/npm-debug.log*
+./front-end/yarn-debug.log*
+./front-end/yarn-error.log*
+
+
+.elasticbeanstalk/
+# Elastic Beanstalk Files
+./front-end/.elasticbeanstalk/*
+!./front-end/.elasticbeanstalk/*.cfg.yml
+!./front-end/.elasticbeanstalk/*.global.yml

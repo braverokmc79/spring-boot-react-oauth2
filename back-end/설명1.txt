@@ -1,0 +1,123 @@
+
+
+[Spring] JWT access/refresh token 인증 구현 (with redis)
+
+https://9keyyyy.tistory.com/48
+
+#
+#파일 게이터 c:/docker/redis/data:/data
+https://docs.filegator.io/translations/default.html
+docker run -v  D:/docker/filegator/data:/var/www/filegator/repository  --name filegator  -p 9393:8080 -d filegator/filegator
+docker run -d \
+  --name=filegator \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Asia/Seoul \
+  -p 80:80 \
+  -p 443:443 \
+  -v </path/to/appdata/config>:/config \
+  -v </path/to/data>:/data \
+  --restart unless-stopped \
+  maxime1907/filegator
+
+==============================================================================================
+
+
+
+
+도커 redis  데이터 외부 저장경로
+mkdir /docker/redis/data
+
+1. 도커 redis 설치
+2.  https://junior-datalist.tistory.com/351
+
+
+docker run --name my-redis -d redis redis-server --appendonly yes
+
+docker run -v /path/on/host:/data --name my-redis -p 6379:6379 redis redis-server --appendonly yes --requirepass [password]
+
+docker run -v /docker/redis/data:/data --name my-redis -p 6379:6379 redis redis-server --appendonly yes --requirepass test1234
+
+
+docker run -v /path/on/host:/data \  # volume mount 지정
+--name [container name] \
+-p 6379:6379 \  # port forwadinr 지정
+redis redis-server
+--appendonly yes
+--requirepass [password] \  # password 지정
+
+
+#redis 전체 데이터 보기
+127.0.0.1:6379> keys *
+1) "refreshToken"
+2) "logoutAccessToken:3"
+3) "refreshToken:3"
+4) "logoutAccessToken"
+
+#redis 전체 삭제 : flushall
+
+#redis 상세보기  get  ,  hash 타입은  hgetall
+127.0.0.1:6379> hgetall refreshToken:3
+hgetall logoutAccessToken:3
+
+
+
+
+0. 우분트22 - Docker 설치방법
+https://haengsin.tistory.com/128
+
+1. 도커 redis  데이터 외부 저장경로 생성
+mkdir /docker
+mkdir /docker/redis/
+mkdir /docker/redis/data
+
+2. 도커 redis 설치 및 실행
+#1)윈도우
+docker run -v c:/docker/redis/data:/data --name my-redis -p 6379:6379 redis redis-server --appendonly yes --requirepass test1234
+
+#2)리눅스
+docker run -v /docker/redis/data:/data --name my-redis -p 6379:6379 redis redis-server --appendonly yes --requirepass test1234
+#docker inspect [container-name] 명령어로 확인하면, 볼륨 마운트 설정확인
+$ docker inspect my-redis
+
+
+3. container 접속 및 테스트
+$ docker exec -it my-redis redis-cli
+#비밀번호 인증 안된 상태에서 redis 명령어 "keys * "를 실해하면 NOAUTH 에러 발생 한다.
+
+# 비밀번호 인증
+$ auth test1234
+
+# 정상작동 확인
+$ set a bbbb
+$ get a
+
+
+4.컨테이너를 중지후 재시작  키가 보존되는 것을 확인
+$ docker stop my-redis
+$ docker start my-redis
+
+$ docker exec -it my-redis redis-cli
+$ auth test1234
+$ get a
+
+
+5.비밀번호 업데이트 ==> 그러나 도커를 정지하고 재구동 하면 원래비밀번호로 변경된다.
+127.0.0.1:6379> config set requirepass 1234
+종료후 재 접속 확인
+$exit
+$ docker exec -it my-redis redis-cli
+$ auth 1234
+$ get a
+
+
+
+
+
+
+
+################################ 권한별 접속   ################################
+https://studyandwrite.tistory.com/499
+
+
+

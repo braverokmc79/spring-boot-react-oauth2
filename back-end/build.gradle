@@ -1,0 +1,96 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+group = 'com.shop'
+version = '0.0.1-SNAPSHOT'
+
+java {
+}
+
+repositories {
+	mavenCentral()
+}
+
+//Gradle에서 빌드하여 생성하는 jar 파일명 변경하기
+bootJar{
+	archivesBaseName = 'ROOT'
+	archiveFileName = 'ROOT.jar'
+	archiveVersion = "0.0.0"
+}
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation group: 'com.github.gavlyukovskiy', name: 'p6spy-spring-boot-starter', version: '1.9.1'
+	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.3.0'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.0'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//jwt version: '0.12.4'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// ⭐ Spring boot 3.x이상에서 QueryDsl 패키지를 정의하는 방법
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+
+	// com.google.guava
+	implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+
+
+
+}
+
+//-plain.jar 를 생성 금지
+jar {
+	enabled = false
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+def querydslSrcDir = 'src/main/generated'
+clean {
+	delete file(querydslSrcDir)
+}
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+	options.compilerArgs.add("-parameters")
+}
+kotlin {
+	jvmToolchain(17)
+}
+
+// 테스트 코드를 제외한 빌드 수행 또는 gradle build -x test
+//https://velog.io/@may_yun/빌드시-테스트-코드-제외하기
+tasks.withType(Test) {
+	enabled = false
+}

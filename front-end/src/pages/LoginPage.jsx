@@ -1,27 +1,28 @@
 import { Button, Container, Grid, TextField, Typography } from '@mui/material'
 import React from 'react'
-import { Link } from 'react-router-dom';
-import { signin , socialLogin} from "../config/ApiServie";
+import { Link } from 'react-router-dom'
+import { signIn } from '../config/ApiService';
+import { API_BASE_URL } from '../api-config';
 
+const LoginPage = () => {
 
-const Login = () => {
+  const handleSubmit=(event)=>{
+    event.preventDefault();
+    const fd=new FormData(event.target);
+    const param=Object.fromEntries(fd.entries());
 
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-    const data=new FormData(e.target);
-    const username=data.get("username");
-    const password=data.get("password");
-    console.log(username,password);
-    signin({username:username,password:password});
-
+    
+    console.log("param :",param);
+    signIn(param);
   }
 
 
-  const handleSocialLogin=(provider)=>{
-      socialLogin(provider);
+
+
+  const handleSocialLogin =(provider)=>{
+    window.location.href=API_BASE_URL+"/api/auth/authorize/"+provider;
   }
 
-  
 
   return (
     <Container component="main" maxWidth="xs" style={{marginTop:"8%"}}  >
@@ -67,23 +68,26 @@ const Login = () => {
                   <Button type='submit' fullWidth variant='contained' color="primary" >로그인</Button>
                 </Grid>
 
-                <Grid item xs={12}>
-                  <Button  onClick={()=>handleSocialLogin("github")}
-                    fullWidth variant='contained'  style={{backgroundColor:"#000"}} >깃허브로 로그인하기</Button>
-                </Grid>
+                 <Grid item xs={12}>
+                  <Button  
+                    onClick={()=>handleSocialLogin('github')}
+                    fullWidth variant='contained' color="primary"   style={{background:'#000', marginBottom:'10px'}}   >깃허브로 로그인하기</Button>
+                </Grid> 
 
 
-                <Grid container justify="flex-end" item xs={12}>
+                <Grid container justify="flex-end">
                          <Grid item >
                             <Link to="/signup" variant="body2">
                                 계정이 없습니까? 여기서 가입하세요.
                             </Link> 
                         </Grid> 
-                  </Grid>
+                    </Grid>
             </Grid>
        </form>
     </Container>
   )
+
+
 }
 
-export default Login
+export default LoginPage

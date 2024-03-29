@@ -42,7 +42,7 @@ public class ApiMemberController {
             //2.서비스를 이용해 리포지터리에 유저 저장
             MemberDto memberDto = MemberDto.of(memberService.createMember(member));
 
-            return ResponseEntity.ok(memberDto);
+            return ResponseEntity.ok(ResDTO.builder().code(1).message("success").data(memberDto).build());
         }catch (Exception e){
             return ResponseEntity.badRequest().body(ResDTO.builder().code(-1).errorCode(e.getMessage()).build());
         }
@@ -65,7 +65,7 @@ public class ApiMemberController {
             MemberDto memberDto = MemberDto.of(memberEntity);
             memberDto.setToken(tokenDto);
 
-            return ResponseEntity.ok(memberDto);
+           return ResponseEntity.ok(ResDTO.builder().code(1).message("success").data(memberDto).build());
         }else{
             return ResponseEntity.badRequest().body(ResDTO.builder().code(-1).message("아이디 또는 비밀번호가 일치하지 않습니다.").errorCode("not match").build());
         }
@@ -83,7 +83,8 @@ public class ApiMemberController {
     public ResponseEntity<?> reissue(@RequestHeader(value = "RefreshToken") String refreshToken) {
         log.info("갱신 토큰 발행 =======================>");
         try{
-            return  ResponseEntity.ok(tokenProvider.reissue(refreshToken));
+            return ResponseEntity.ok(ResDTO.builder().code(1).message("success")
+                    .data(tokenProvider.reissue(refreshToken)).build());
         }catch (Exception e){
             //갱신토큰이 유요하지 않을 경우 code 값을 -1로 주고, 프론트에서 "refreshToken is invalid" 메시지 확인후 로그아웃 처리한다.
             return ResponseEntity.badRequest().body(ResDTO.builder().code(-1).message("갱신 토큰이 유요하지 않습니다.").errorCode("INVALID_REFRESH_TOKEN").build());

@@ -8,10 +8,8 @@ const Sociallogin = (props) => {
             return params.get(name);
   };
 
-
   const accessToken=getUrlParameters('accessToken');
   const refreshToken=getUrlParameters('refreshToken');
-  console.log("토큰 파싱 :"+ accessToken, refreshToken);
 
   if(accessToken && refreshToken){
         console.log("로컬스토리지에 저장 accessToken:", accessToken);

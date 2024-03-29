@@ -1,27 +1,29 @@
-import { Box } from '@mui/material'
 import React from 'react'
-import {  Route, Routes } from 'react-router-dom'
-import App from './App'
-import Copyright from './components/Copyright';
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
-import Sociallogin from './pages/Sociallogin';
+import Copyright from './components/Copyright'
+import { Route, Routes } from 'react-router-dom'
+import { Box } from '@mui/material'
 
+import App from './App'
+import SinUp from './pages/SinUp'
+import SocialLogin from './pages/SocialLogin'
+import LoginPage from './pages/LoginPage'
 
 const AppRouter = () => {
+
+
   return (
-    <>
-        <Routes>
-            <Route path="/"  element={<App /> }   />
-            <Route path="/login"  element={<Login /> }   />
-            <Route path="/signup"  element={<SignUp /> }   />
-            <Route path="/sociallogin"  element={<Sociallogin /> }   />
-        </Routes>
-                    
-        <Box mt={5}>
-              <Copyright />
+    <div>
+         <Routes>
+            <Route path='/' element={<App  />} />
+            <Route path='/login' element={<LoginPage  />} />
+            <Route path='/signup' element={<SinUp  />} />
+            <Route path='/sociallogin' element={<SocialLogin />} />
+         </Routes>
+
+         <Box mt={5}>
+            <Copyright />
         </Box>
-    </>
+    </div>
   )
 }
 
